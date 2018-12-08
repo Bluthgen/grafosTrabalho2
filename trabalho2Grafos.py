@@ -76,7 +76,7 @@ def solucaoInicial(grafo: GrafoCartesiano, s: int):
     
 def doisOpt(solucao, grafo: GrafoCartesiano):
     n = len(solucao)
-    u = v = x = y = 0
+    troca1 = troca2 = 0
     while True:
         ðmax = 0
         for u in range(0, n-1):
@@ -88,27 +88,26 @@ def doisOpt(solucao, grafo: GrafoCartesiano):
             if not u+2 > limite:
                 for x in range(u+2, limite):
                     y= x+1
-                    ð= math.floor((Vertice.distance(grafo.vertices[solucao[u]],grafo.vertices[solucao[v]]) + Vertice.distance(grafo.vertices[solucao[x]],grafo.vertices[solucao[y]])) - (Vertice.distance(grafo.vertices[solucao[u]],grafo.vertices[solucao[x]]) + Vertice.distance(grafo.vertices[solucao[v]], grafo.vertices[solucao[y]])))
-                    #print(ð, ðmax)
+                    ð= (Vertice.distance(grafo.vertices[solucao[u]],grafo.vertices[solucao[v]]) + Vertice.distance(grafo.vertices[solucao[x]],grafo.vertices[solucao[y]])) - (Vertice.distance(grafo.vertices[solucao[u]],grafo.vertices[solucao[x]]) + Vertice.distance(grafo.vertices[solucao[v]], grafo.vertices[solucao[y]]))
                     if ð > ðmax:
                         ðmax = ð
+                        troca1 = v
+                        troca2 = x
         if ðmax > 0:
-            solucao[v], solucao[x]= solucao[x], solucao[v]
-            custo = 0
-            for i in solucao:
-                if i == len(solucao)-1:
-                    custo = custo + Vertice.distance(grafo.vertices[solucao[i]], grafo.vertices[solucao[0]])
-                else:
-                    custo = custo + Vertice.distance(grafo.vertices[solucao[i]], grafo.vertices[solucao[i+1]])
-        
-            print(custo)
+            aux= []
+            for k in range(troca1, troca2+1):
+                aux.append(solucao[k])
+            aux.reverse()
+            for k in range(troca1, troca2+1):
+                solucao[k]= aux[k - troca1]
+            troca1 = troca2 = 0                
         else:
             return solucao
     
 
 def inicializaCartesiano():    
     grafo= GrafoCartesiano()
-    with open("input2.txt", "r") as arquivo:
+    with open("input1.txt", "r") as arquivo:
         for linha in arquivo:
             params= linha.split(" ")
             nome= params[0]
@@ -122,14 +121,6 @@ grafo = inicializaCartesiano()
 prim(grafo, grafo.vertices[0])
 
 solucao = solucaoInicial(grafo, 0)
-custo = 0
-for i in solucao:
-    if i == len(solucao)-1:
-        custo = custo + Vertice.distance(grafo.vertices[solucao[i]], grafo.vertices[solucao[0]])
-    else:
-        custo = custo + Vertice.distance(grafo.vertices[solucao[i]], grafo.vertices[solucao[i+1]])
-        
-print(custo)
 
 solucao = doisOpt(solucao, grafo)
 custo = 0
@@ -139,4 +130,6 @@ for i in solucao:
     else:
         custo = custo + Vertice.distance(grafo.vertices[solucao[i]], grafo.vertices[solucao[i+1]])
         
-print(custo)
+print(custo, ":", sep="", end=" ")
+for i in solucao:
+    print(solucao[i], end=" ")
