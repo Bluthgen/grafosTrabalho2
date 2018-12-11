@@ -79,15 +79,18 @@ def doisOpt(solucao, grafo: GrafoCartesiano):
     troca1 = troca2 = 0
     while True:
         ðmax = 0
-        for u in range(0, n-1):
+        for u in range(0, n-2):
             if u == 0:
-                limite = n-2
-            else:
                 limite = n-1
+            else:
+                limite = n
             v = u+1
             if not u+2 > limite:
                 for x in range(u+2, limite):
-                    y= x+1
+                    if x == n-1:
+                        y= 0
+                    else:
+                        y= x+1
                     ð= (Vertice.distance(grafo.vertices[solucao[u]],grafo.vertices[solucao[v]]) + Vertice.distance(grafo.vertices[solucao[x]],grafo.vertices[solucao[y]])) - (Vertice.distance(grafo.vertices[solucao[u]],grafo.vertices[solucao[x]]) + Vertice.distance(grafo.vertices[solucao[v]], grafo.vertices[solucao[y]]))
                     if ð > ðmax:
                         ðmax = ð
@@ -107,7 +110,7 @@ def doisOpt(solucao, grafo: GrafoCartesiano):
 
 def inicializaCartesiano():    
     grafo= GrafoCartesiano()
-    with open("input1.txt", "r") as arquivo:
+    with open("Testes/att48.tsp", "r") as arquivo:
         for linha in arquivo:
             params= linha.split(" ")
             nome= params[0]
@@ -118,9 +121,10 @@ def inicializaCartesiano():
     return grafo
 
 grafo = inicializaCartesiano()
-prim(grafo, grafo.vertices[0])
+s= 0
+prim(grafo, grafo.vertices[s])
 
-solucao = solucaoInicial(grafo, 0)
+solucao = solucaoInicial(grafo, s)
 
 solucao = doisOpt(solucao, grafo)
 custo = 0
