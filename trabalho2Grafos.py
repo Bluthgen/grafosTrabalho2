@@ -9,7 +9,6 @@ class Vertice:
     def __init__(self, nome:int, coords:tuple):
         self.nome= nome
         self.x, self.y= coords
-        self.tipo= ""
         self.chave= math.inf
         self.pai = 0
         self.filhos = []
@@ -110,7 +109,7 @@ def doisOpt(solucao, grafo: GrafoCartesiano):
 
 def inicializaCartesiano():    
     grafo= GrafoCartesiano()
-    with open("Testes/att48.tsp", "r") as arquivo:
+    with open("Testes/burma14.tsp", "r") as arquivo:
         for linha in arquivo:
             params= linha.split(" ")
             nome= params[0]
@@ -126,7 +125,7 @@ prim(grafo, grafo.vertices[s])
 
 solucao = solucaoInicial(grafo, s)
 
-solucao = doisOpt(solucao, grafo)
+#solucao = doisOpt(solucao, grafo)
 custo = 0
 for i in solucao:
     if i == len(solucao)-1:
